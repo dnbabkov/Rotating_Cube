@@ -21,7 +21,7 @@ public class Viewer {
         JSlider pitchSlider = new JSlider(SwingConstants.VERTICAL, -180, 180, 0);
         pane.add(pitchSlider, BorderLayout.EAST);
 
-        final Vertex[] camera = {new Vertex(0, 0, -500)};
+        final Vertex[] camera = {new Vertex(-300, -300, 0)};
 
         final double[] distance = {200};
 
@@ -88,7 +88,7 @@ public class Viewer {
                     Point2D vs3 = v3.screenTransition(distance[0]);
                     Point2D vs4 = v4.screenTransition(distance[0]);
 
-                    if (sTemp.isVisible(camera[0])){
+                    if (sTemp.isVisibleAlg1(camera[0])){
 
                         Path2D path = new Path2D.Double();
                         path.moveTo(vs1.getX(), vs1.getY());
@@ -98,9 +98,7 @@ public class Viewer {
                         path.closePath();
 
                         g2.draw(path);
-
                     }
-
                 }
             }
         };
@@ -126,6 +124,7 @@ public class Viewer {
 
         });
 
+        final boolean[] flipped = {false};
         final int[] previousX = {-1000};
         final int[] currentX = {0};
         final int[] previousY = {-1000};
@@ -152,27 +151,31 @@ public class Viewer {
                 spherical = spherical.convert(camera[0]);
 
                 spherical.phi -= Math.toRadians(deltaX);
-                spherical.zeta += Math.toRadians(deltaY);
 
-                if (spherical.phi >= Math.PI) {
-                    spherical.phi -= Math.PI;
-                }
-
-                if (spherical.phi <= 0) {
-                    spherical.phi += Math.PI;
+                if (!flipped[0]) {
+                    spherical.zeta += Math.toRadians(deltaY);
+                } else {
+                    spherical.zeta -= Math.toRadians(deltaY);
                 }
 
                 if (spherical.zeta >= Math.PI) {
-                    spherical.zeta -= Math.PI;
-
+                    flipped[0] = !flipped[0];
+                    camera[0].x = - spherical.r * Math.sin(spherical.zeta) * Math.cos(spherical.phi);
+                    camera[0].y = - spherical.r * Math.sin(spherical.zeta) * Math.sin(spherical.phi);
+                } else {
+                    camera[0].x = spherical.r * Math.sin(spherical.zeta) * Math.cos(spherical.phi);
+                    camera[0].y = spherical.r * Math.sin(spherical.zeta) * Math.sin(spherical.phi);
                 }
 
-                if (spherical.zeta <= 0) {
-                    spherical.zeta += Math.PI;
+                if (spherical.zeta <= 0.1) {
+                    flipped[0] = !flipped[0];
+                    camera[0].x = - spherical.r * Math.sin(spherical.zeta) * Math.cos(spherical.phi);
+                    camera[0].y = - spherical.r * Math.sin(spherical.zeta) * Math.sin(spherical.phi);
+                } else {
+                    camera[0].x = spherical.r * Math.sin(spherical.zeta) * Math.cos(spherical.phi);
+                    camera[0].y = spherical.r * Math.sin(spherical.zeta) * Math.sin(spherical.phi);
                 }
 
-                camera[0].x = spherical.r * Math.sin(spherical.zeta) * Math.cos(spherical.phi);
-                camera[0].y = spherical.r * Math.sin(spherical.zeta) * Math.sin(spherical.phi);
                 camera[0].z = spherical.r * Math.cos(spherical.zeta);
 
                 renderPanel.repaint();
@@ -184,40 +187,6 @@ public class Viewer {
 
                 previousX[0] = -1000;
                 previousY[0] = -1000;
-
-            }
-        });
-
-        renderPanel.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int degOnX = 0;
-                int degOnZ = 0;
-
-                if(e.getKeyCode() == 68) {
-                    degOnX += 2;
-                }
-                if(e.getKeyCode() == 65) {
-                    degOnX += -2;
-                }
-                if(e.getKeyCode() == 87) {
-                    degOnZ += 2;
-                }
-                if(e.getKeyCode() == 83) {
-                    degOnZ += -2;
-                }
-
-
-
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
 
             }
         });

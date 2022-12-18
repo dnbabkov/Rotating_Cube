@@ -1,11 +1,16 @@
 public class VertexSpherical {
 
     double r, zeta, phi;
+    double zeta2;
 
     VertexSpherical(double r, double zeta, double phi){
         this.r = r;
         this.phi = phi;
         this.zeta = zeta;
+    }
+
+    public static void convertZ2toZ() {
+
     }
 
     public static VertexSpherical convert(Vertex v) {
@@ -16,6 +21,12 @@ public class VertexSpherical {
         if (rxy != 0) {
             phi = Math.acos(v.x / rxy);
         }
+
+        if (v.y < 0) {
+            phi = -phi;
+        }
+
+
 
         return new VertexSpherical(r, zeta, phi);
     }
