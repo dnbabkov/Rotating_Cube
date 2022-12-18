@@ -52,6 +52,25 @@ public class Viewer {
                 cube.add(new Square(new Vertex(100, 100, -100), new Vertex(-100, 100, -100), new Vertex(-100, 100, 100), new Vertex(100, 100, 100)));
                 cube.add(new Square(new Vertex(100, -100, 100), new Vertex(-100, -100, 100), new Vertex(-100, -100, -100), new Vertex(100, -100, -100)));
 
+                double x = 0.0;
+                double y = 0.0;
+                double z = 0.0;
+                int count = 0;
+
+                for (Square s : cube) {
+                    x += s.v1.x + s.v2.x + s.v3.x + s.v4.x;
+                    y += s.v1.y + s.v2.y + s.v3.y + s.v4.y;
+                    z += s.v1.z + s.v2.z + s.v3.z + s.v4.z;
+
+                    count += 4;
+                }
+
+                x /= count;
+                y /= count;
+                z /= count;
+
+                Vertex barCenter = new Vertex(x, y, z);
+
                 double heading = -Math.toRadians(headingSlider.getValue());
                 double pitch = -Math.toRadians(pitchSlider.getValue());
                 Matrix3 pitchTransform = new Matrix3(new double[] {
@@ -99,6 +118,7 @@ public class Viewer {
 
                         g2.draw(path);
                     }
+
                 }
             }
         };
