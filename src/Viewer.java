@@ -45,6 +45,12 @@ public class Viewer {
                 // Грани - 1234, 2673, 6587, 5148, 5621, 4378
 
                 List<Square> cube = new ArrayList<>();
+                cube.add(new Square(new Vertex(100, 100, 100), new Vertex(-100, 100, 100), new Vertex(-100, -100, 100), new Vertex(100, -100, 100)));
+                cube.add(new Square(new Vertex(-100, 100, 100), new Vertex(-100, 100, -100), new Vertex(-100, -100, -100), new Vertex(-100, -100, 100)));
+                cube.add(new Square(new Vertex(-100, 100, -100), new Vertex(100, 100, -100), new Vertex(100, -100, -100), new Vertex(-100, -100, -100)));
+                cube.add(new Square(new Vertex(100, 100, -100), new Vertex(100, 100, 100), new Vertex(100, -100, 100), new Vertex(100, -100, -100)));
+                cube.add(new Square(new Vertex(100, 100, -100), new Vertex(-100, 100, -100), new Vertex(-100, 100, 100), new Vertex(100, 100, 100)));
+                cube.add(new Square(new Vertex(100, -100, 100), new Vertex(-100, -100, 100), new Vertex(-100, -100, -100), new Vertex(100, -100, -100)));
 
                 double heading = -Math.toRadians(headingSlider.getValue());
                 double pitch = -Math.toRadians(pitchSlider.getValue());
